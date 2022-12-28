@@ -1,0 +1,47 @@
+---
+- name: "Linux Setup"
+  hosts: localhost
+  connection: local
+
+  pre_tasks:
+    - name: "Check prerequisites: python3"
+      ansible.builtin.apt:
+        pkg:
+          - python3-apt
+          - python3-venv
+          - python3-pip
+          - build-essential
+          - procps
+          - curl
+          - file
+          - git
+        state: present
+        update_cache: true
+      become: true
+
+  tasks:
+    - name: "Cli tools"
+      ansible.builtin.apt:
+        pkg:
+          - bat
+          - tldr
+        state: present
+        update_cache: true
+      become: true
+
+    - name: "Pipx install to user"
+      ansible.builtin.pip:
+        name: pipx
+        extra_args: --user
+
+    - name: "Pipx install: hatch"
+      community.general.pipx:
+        name: hatch
+
+    - name: "Pipx install: ipython"
+      community.general.pipx:
+        name: ipython
+
+    - name: "Pipx install: csvkit"
+      community.general.pipx:
+        name: csvkit
